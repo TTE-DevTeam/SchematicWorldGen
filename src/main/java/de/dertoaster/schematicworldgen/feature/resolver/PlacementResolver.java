@@ -43,7 +43,7 @@ public final class PlacementResolver {
 
             y = level.getHeight(
 
-                    Heightmap.Types.WORLD_SURFACE_WG,
+                    Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
 
                     origin.getX(),
                     origin.getZ()

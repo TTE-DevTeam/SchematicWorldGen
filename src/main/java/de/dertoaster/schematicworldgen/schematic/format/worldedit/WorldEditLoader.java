@@ -1,5 +1,6 @@
 package de.dertoaster.schematicworldgen.schematic.format.worldedit;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
@@ -99,11 +100,17 @@ public final class WorldEditLoader
                     weState.getAsString();
 
             BlockState state =
-                    BlockStateParser.parseForBlock(
-                            BuiltInRegistries.BLOCK.asLookup(),
-                            stateString,
-                            true
-                    ).blockState();
+                    null;
+            try {
+                state = BlockStateParser.parseForBlock(
+                        BuiltInRegistries.BLOCK,
+                        stateString,
+                        true
+                ).blockState();
+            } catch (CommandSyntaxException e) {
+                e.printStackTrace();
+                continue;
+            }
 
             if (state.isAir()) {
                 continue;

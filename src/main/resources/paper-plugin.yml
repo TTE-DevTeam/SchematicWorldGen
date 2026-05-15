@@ -4,7 +4,7 @@ main: de.dertoaster.schematicworldgen.TTEWorldGenPlugin
 loader: de.dertoaster.schematicworldgen.TTEWorldGenClassLoader
 bootstrapper: de.dertoaster.schematicworldgen.TTEWorldGenBootstrapper
 api-version: '1.21'
-#dependencies:
+dependencies:
   #bootstrap:
   # Let's say that RegistryPlugin registers some data that your plugin needs to use
   # We don't need this during runtime, so it's not required in the server section.
@@ -13,10 +13,10 @@ api-version: '1.21'
   #load: BEFORE
   #required: true
   #join-classpath: true # Defaults to true
-  #server:
+  server:
     # Add a required "RequiredPlugin" dependency, which will load BEFORE your plugin.
-    #Windfarer:
-      #load: BEFORE
-      #required: true
+    WorldEdit:
+      load: BEFORE
+      required: true
       # False means that your plugin will not have access to their classpath
-      #join-classpath: true
+      join-classpath: true

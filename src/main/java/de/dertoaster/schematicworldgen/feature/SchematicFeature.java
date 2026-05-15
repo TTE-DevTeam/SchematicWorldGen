@@ -100,15 +100,16 @@ public final class SchematicFeature
 
                 );
 
-        if (!CollisionChecker.canPlace(
-
-                placementContext,
-                schematic,
-                placementPos
-
-        )) {
-            return false;
-        }
+        // TODO: Change how this works, this isnt correct as of now
+//        if (!CollisionChecker.canPlace(
+//
+//                placementContext,
+//                schematic,
+//                placementPos
+//
+//        )) {
+//            return false;
+//        }
 
         PlacementEngine.place(
 

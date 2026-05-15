@@ -1,5 +1,24 @@
-Ignite Mod Template [![Discord](https://img.shields.io/discord/819522977586348052?style=for-the-badge)](https://discord.gg/rYpaxPFQrj)
-===================
+# SchemGen (Schematic Worldgen System for Paper / Mojang Mappings)
 
-A template for creating an [Ignite](https://github.com/vectrix-space/ignite) 
-mod for [Paper](https://papermc.io/) 1.21.1.
+A high-performance schematic-based world generation system for Minecraft using:
+- Mojang mappings
+- Fast palette-based internal representation
+- Custom placement pipeline
+- Processor-based modification system
+- Support for `.schem`, `.schematic`, and `.bo2`
+
+---
+
+## Features
+
+### Supported formats
+- Sponge `.schem`
+- MCEdit `.schematic`
+- BO2 terrain objects
+- Extensible loader API
+
+---
+
+### Core design
+
+SchemGen converts all external formats into a single immutable internal format:

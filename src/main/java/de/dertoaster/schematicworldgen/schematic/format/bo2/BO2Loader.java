@@ -39,6 +39,9 @@ public final class BO2Loader
                 .endsWith(".bo2");
     }
 
+    // TODO: FixMe!
+    // Specification: https://github.com/MCTCP/TerrainControl/blob/master/bo2spec.txt
+    // Somehow, the mushroom rotates sideways and only a quarter of it is placed
     @Override
     public ILoadedSchematic load(
             Identifier file,
@@ -83,6 +86,8 @@ public final class BO2Loader
             String[] coords =
                     split[0].split(",");
 
+            // Attention! BO2: YXZ, Z: Elevation
+            // Object center is always 0/0/0
             int x =
                     Integer.parseInt(coords[0]);
 

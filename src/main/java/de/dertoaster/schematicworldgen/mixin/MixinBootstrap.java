@@ -1,28 +1,29 @@
 package de.dertoaster.schematicworldgen.mixin;
 
-import net.minecraft.server.Bootstrap;
+import de.dertoaster.schematicworldgen.feature.registry.SchematicFeatures;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(Bootstrap.class)
+@Mixin(Feature.class)
 public abstract class MixinBootstrap {
 
   // RE-register some of the dispense behaviors AFTER bootstrap
 
   @Inject(
-    method = "bootStrap()V",
-    at = @At(
-      value = "INVOKE",
-      target = "Lnet/minecraft/core/dispenser/DispenseItemBehavior;bootStrap()V",
-      shift = At.Shift.AFTER
-    ),
+    method = "<clinit>",
+    at = @At("TAIL"),
     remap = false
   )
-  private static void replaceDispenseBehaviors(
+  private static void schematicworldgen$register(
     CallbackInfo callbackInfo
   ) {
+      Registry.register(BuiltInRegistries.FEATURE, "schematicworldgen:schematic", SchematicFeatures.SCHEMATIC_FEATURE.get());
   }
 
 }

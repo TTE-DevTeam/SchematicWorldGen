@@ -18,7 +18,3 @@ A high-performance schematic-based world generation system for Minecraft using:
 - Extensible loader API
 
 ---
-
-### Core design
-
-SchemGen converts all external formats into a single immutable internal format:

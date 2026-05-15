@@ -18,6 +18,7 @@ public record SchematicFeatureConfig(
 
         List<SchematicEntry> entries,
 
+        // TODO: Modify to use StructureProcessors instead!
         List<String> processors
 
 ) implements FeatureConfiguration {

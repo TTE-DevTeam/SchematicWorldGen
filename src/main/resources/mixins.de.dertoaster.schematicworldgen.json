@@ -1,0 +1,10 @@
+{
+  "required": true,
+  "minVersion": "0.8.7",
+  "package": "de.dertoaster.schematicworldgen.mixin",
+  "plugin": "de.dertoaster.schematicworldgen.mixin.plugins.MixinPlugin",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_21",
+  "server": [
+  ]
+}

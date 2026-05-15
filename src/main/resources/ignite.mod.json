@@ -1,0 +1,10 @@
+{
+  "id": "SchematicWorldGen",
+  "version": "1.0.0",
+  "mixins": [
+    "mixins.de.dertoaster.schematicworldgen.json"
+  ],
+  "wideners": [
+
+  ]
+}

@@ -109,6 +109,7 @@ public record SchematicEntry(
     /**
      * Datapack codec.
      */
+    // TODO: Abstract away placement mode into its own object that then handles all the placement logic!
     public static final Codec<SchematicEntry>
             CODEC =
             RecordCodecBuilder.create(instance ->

@@ -1,0 +1,34 @@
+{
+    "config": {
+        "entries": [
+            {
+                "adapt_waterlogging": true,
+                "collision_mode": "solid_blocks",
+                "extend_foundation": false,
+                "file": "tte:schematics/shroom/yellow/1.bo2",
+                "offset": [
+                    -20,
+                    -24,
+                    -8
+                ],
+                "persistent_leaves": false,
+                "placement_mode": "terrain",
+                "random_mirror": true,
+                "random_rotation": true,
+                "random_y_offset": 0,
+                "replace_mode": "if_structure_solid",
+                "spawn_conditions": {
+                    "in_air": false,
+                    "on_lava": false,
+                    "on_solid_ground": true,
+                    "on_water": false,
+                    "under_lava": false,
+                    "underwater": false
+                },
+                "terrain_offset": 0,
+                "weight": 100
+            }
+        ]
+    },
+    "type": "schematicworldgen:schematic"
+}

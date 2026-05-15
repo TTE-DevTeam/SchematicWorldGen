@@ -1,5 +1,7 @@
 package de.dertoaster.schematicworldgen.schematic.format.bo2;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.sk89q.worldedit.world.registry.LegacyMapper;
 import de.dertoaster.schematicworldgen.schematic.ILoadedSchematic;
 import de.dertoaster.schematicworldgen.schematic.internal.PackedLoadedSchematic;
 import de.dertoaster.schematicworldgen.schematic.internal.PackedPosition;
@@ -7,10 +9,12 @@ import de.dertoaster.schematicworldgen.schematic.internal.PaletteBuilder;
 import de.dertoaster.schematicworldgen.schematic.loader.ISchematicLoader;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
+import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.io.BufferedReader;
@@ -20,6 +24,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class BO2Loader
         implements ISchematicLoader {
@@ -86,23 +92,10 @@ public final class BO2Loader
             int z =
                     Integer.parseInt(coords[2]);
 
-            Identifier blockId =
-                    Identifier.parse(
-                            split[1]
-                    );
-
-            Optional<Holder.Reference<Block>> optBlockReference =
-                    BuiltInRegistries.BLOCK
-                            .get(blockId);
-            if (optBlockReference.isEmpty())
+            // BO2 can be integer values!
+            final BlockState state = this.loadBlockState(split[1]);
+            if (state == null)
                 continue;
-
-            Block block = optBlockReference.get().value();
-            if (block == null)
-                continue;
-
-            BlockState state =
-                    block.defaultBlockState();
 
             short paletteId =
                     palette.idFor(state);
@@ -152,5 +145,60 @@ public final class BO2Loader
 
                 new Int2ObjectOpenHashMap<>()
         );
+    }
+
+    static final String legacyIdRegex = "^\\d+(\\.\\d+)?$";
+    static final Pattern pattern = Pattern.compile(legacyIdRegex, Pattern.MULTILINE);
+
+    private BlockState loadBlockState(String blockData) {
+        final Matcher matcher = pattern.matcher(blockData);
+        if (matcher.find()) {
+            // Legacy format
+            int block;
+            int data = 0;
+            if (blockData.indexOf('.') > 0) {
+                String[] split = blockData.split("\\.");
+                try {
+                    block = Integer.parseInt(split[0]);
+                    data = Integer.parseInt(split[1]);
+                } catch(Exception ex) {
+                    return null;
+                }
+            } else {
+                try {
+                    block = Integer.parseInt(blockData);
+                } catch(Exception ex) {
+                    return null;
+                }
+            }
+            // We abuse FAWE
+            com.sk89q.worldedit.world.block.BlockState weState = LegacyMapper.getInstance().getBlockFromLegacy(block, data);
+            try {
+                return BlockStateParser.parseForBlock(BuiltInRegistries.BLOCK, weState.toString(), true).blockState();
+            } catch (CommandSyntaxException e) {
+                e.printStackTrace();
+                return Blocks.AIR.defaultBlockState();
+            }
+        } else {
+            // Modern
+            Identifier blockId =
+                    Identifier.parse(
+                            blockData
+                    );
+
+            Optional<Holder.Reference<Block>> optBlockReference =
+                    BuiltInRegistries.BLOCK
+                            .get(blockId);
+            if (optBlockReference.isEmpty())
+                return null;
+
+            Block block = optBlockReference.get().value();
+            if (block == null)
+                return null;
+
+            BlockState state =
+                    block.defaultBlockState();
+            return state;
+        }
     }
 }

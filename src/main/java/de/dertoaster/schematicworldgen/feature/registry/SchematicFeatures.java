@@ -1,6 +1,8 @@
 package de.dertoaster.schematicworldgen.feature.registry;
 
+import de.dertoaster.schematicworldgen.feature.ConfigurableLargeDripstoneFeature;
 import de.dertoaster.schematicworldgen.feature.SchematicFeature;
+import de.dertoaster.schematicworldgen.feature.config.ConfigurableLargeDripstoneConfiguration;
 import de.dertoaster.schematicworldgen.feature.config.SchematicFeatureConfig;
 import net.minecraft.world.level.levelgen.feature.Feature;
 
@@ -17,6 +19,12 @@ public final class SchematicFeatures {
             SCHEMATIC_FEATURE =
             () -> new SchematicFeature(
                     SchematicFeatureConfig.CODEC
+            );
+
+    public static final Supplier<Feature<ConfigurableLargeDripstoneConfiguration>>
+            CONFIGURABLE_LARGE_DRIPSTONE =
+            () -> new ConfigurableLargeDripstoneFeature(
+                    ConfigurableLargeDripstoneConfiguration.CODEC
             );
 
     private SchematicFeatures() {

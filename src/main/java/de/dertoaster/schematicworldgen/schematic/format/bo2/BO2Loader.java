@@ -102,7 +102,8 @@ public final class BO2Loader
         final BlockPos origin = new BlockPos(-minX, -minY, minZ);
         for (int i = 0; i < ids.length; i++) {
             ids[i] = paletteIds.get(i);
-            packed[i] = BlockPos.of(positions.get(i)).offset(origin).asLong();
+//            packed[i] = BlockPos.of(positions.get(i)).offset(origin).asLong();
+            packed[i] = positions.get(i);
         }
 
         return new PackedLoadedSchematic(

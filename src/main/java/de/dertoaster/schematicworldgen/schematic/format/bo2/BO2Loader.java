@@ -39,29 +39,16 @@ public final class BO2Loader
                 .endsWith(".bo2");
     }
 
-    // TODO: FixMe!
     // Specification: https://github.com/MCTCP/TerrainControl/blob/master/bo2spec.txt
-    // Somehow, the mushroom rotates sideways and only a quarter of it is placed
     @Override
     public ILoadedSchematic load(
             Identifier file,
             InputStream stream
     ) throws IOException {
-
-        PaletteBuilder palette =
-                new PaletteBuilder();
-
-        List<Long> positions =
-                new ArrayList<>();
-
-        List<Short> paletteIds =
-                new ArrayList<>();
-
-        BufferedReader reader =
-                new BufferedReader(
-                        new InputStreamReader(stream)
-                );
-
+        PaletteBuilder palette = new PaletteBuilder();
+        List<Long> positions = new ArrayList<>();
+        List<Short> paletteIds = new ArrayList<>();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         String line;
 
         int minX = Integer.MAX_VALUE;
@@ -73,18 +60,13 @@ public final class BO2Loader
         int maxZ = Integer.MIN_VALUE;
 
         while ((line = reader.readLine()) != null) {
-
             line = line.trim();
-
             if (!line.contains(":")) {
                 continue;
             }
 
-            String[] split =
-                    line.split(":");
-
-            String[] coords =
-                    split[0].split(",");
+            String[] split = line.split(":");
+            String[] coords = split[0].split(",");
 
             // Attention! BO2: YXZ, Z: Elevation
             // Object center is always 0/0/0
@@ -97,8 +79,7 @@ public final class BO2Loader
             if (state == null)
                 continue;
 
-            short paletteId =
-                    palette.idFor(state);
+            short paletteId = palette.idFor(state);
 
             positions.add(
                     new BlockPos(x, y, z).asLong()
@@ -115,16 +96,13 @@ public final class BO2Loader
             maxZ = Math.max(maxZ, z);
         }
 
-        short[] ids =
-                new short[paletteIds.size()];
+        short[] ids = new short[paletteIds.size()];
+        long[] packed = new long[positions.size()];
 
-        long[] packed =
-                new long[positions.size()];
-
+        final BlockPos origin = new BlockPos(-minX, -minY, minZ);
         for (int i = 0; i < ids.length; i++) {
-
             ids[i] = paletteIds.get(i);
-            packed[i] = positions.get(i);
+            packed[i] = BlockPos.of(positions.get(i)).offset(origin).asLong();
         }
 
         return new PackedLoadedSchematic(

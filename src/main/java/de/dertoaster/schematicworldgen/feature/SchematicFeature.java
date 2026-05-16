@@ -3,11 +3,8 @@ package de.dertoaster.schematicworldgen.feature;
 import com.mojang.serialization.Codec;
 import de.dertoaster.schematicworldgen.feature.config.SchematicEntry;
 import de.dertoaster.schematicworldgen.feature.config.SchematicFeatureConfig;
-import de.dertoaster.schematicworldgen.feature.processor.ProcessorRegistry;
 import de.dertoaster.schematicworldgen.feature.processor.SchematicProcessors;
-import de.dertoaster.schematicworldgen.feature.resolver.PlacementResolver;
 import de.dertoaster.schematicworldgen.placement.PlacementEngine;
-import de.dertoaster.schematicworldgen.placement.collision.CollisionChecker;
 import de.dertoaster.schematicworldgen.placement.context.PlacementContext;
 import de.dertoaster.schematicworldgen.placement.processor.IPlacementProcessor;
 import de.dertoaster.schematicworldgen.schematic.ILoadedSchematic;
@@ -35,36 +32,15 @@ public final class SchematicFeature
     }
 
     @Override
-    public boolean place(
-            FeaturePlaceContext<SchematicFeatureConfig> context
-    ) {
+    public boolean place(FeaturePlaceContext<SchematicFeatureConfig> context) {
+        RandomSource random = context.random();
+        SchematicEntry entry = context.config().selectRandom(random);
+        ILoadedSchematic schematic = SchematicCache.INSTANCE.get(entry.file());
 
-        RandomSource random =
-                context.random();
+        Rotation rotation = entry.randomRotation() ? Rotation.getRandom(random) : Rotation.NONE;
+        Mirror mirror = entry.randomMirror() ? random.nextBoolean() ? Mirror.FRONT_BACK : Mirror.LEFT_RIGHT : Mirror.NONE;
 
-        SchematicEntry entry =
-                context.config()
-                        .selectRandom(random);
-
-        ILoadedSchematic schematic =
-                SchematicCache.INSTANCE
-                        .get(entry.file());
-
-        Rotation rotation =
-                entry.randomRotation()
-                        ? Rotation.getRandom(random)
-                        : Rotation.NONE;
-
-        Mirror mirror =
-                entry.randomMirror()
-                        ? random.nextBoolean()
-                        ? Mirror.FRONT_BACK
-                        : Mirror.LEFT_RIGHT
-                        : Mirror.NONE;
-
-        List<IPlacementProcessor>
-                processors =
-                new ArrayList<>();
+        List<IPlacementProcessor> processors = new ArrayList<>();
 
         for (String id : context.config().processors()) {
             processors.add(
@@ -72,34 +48,10 @@ public final class SchematicFeature
             );
         }
 
-        PlacementContext placementContext =
-                new PlacementContext(
+        PlacementContext placementContext = new PlacementContext(context.level(), random, entry, rotation, mirror, processors);
 
-                        context.level(),
-
-                        random,
-
-                        entry,
-
-                        rotation,
-
-                        mirror,
-
-                        processors
-
-                );
-
-        // TODO: This doesnt provide proper results as of now!
-        BlockPos placementPos =
-                PlacementResolver.resolve(
-
-                        context.level(),
-
-                        context.origin(),
-
-                        entry
-
-                );
+        // DONE: Refactor! searching for a spot to place this thing at is the decision of the placed feature, not from us!
+        BlockPos placementPos = context.origin().offset(entry.offset().offset(0, entry.randomYOffset().sample(random), 0));
 
         // TODO: Change how this works, this isnt correct as of now
 //        if (!CollisionChecker.canPlace(
@@ -112,13 +64,7 @@ public final class SchematicFeature
 //            return false;
 //        }
 
-        PlacementEngine.place(
-
-                placementContext,
-                schematic,
-                placementPos
-
-        );
+        PlacementEngine.place(placementContext, schematic, placementPos);
 
         return true;
     }

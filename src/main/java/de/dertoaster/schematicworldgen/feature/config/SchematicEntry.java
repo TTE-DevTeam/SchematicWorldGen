@@ -20,6 +20,7 @@ import net.minecraft.util.valueproviders.IntProvider;
  * - environment restrictions
  * - processor behavior
  */
+// TODO: Add option to flip the schematic upside down
 public record SchematicEntry(
 
         /**

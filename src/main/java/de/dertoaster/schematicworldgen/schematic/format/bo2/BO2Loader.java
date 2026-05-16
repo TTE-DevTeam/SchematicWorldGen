@@ -4,12 +4,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.sk89q.worldedit.world.registry.LegacyMapper;
 import de.dertoaster.schematicworldgen.schematic.ILoadedSchematic;
 import de.dertoaster.schematicworldgen.schematic.internal.PackedLoadedSchematic;
-import de.dertoaster.schematicworldgen.schematic.internal.PackedPosition;
 import de.dertoaster.schematicworldgen.schematic.internal.PaletteBuilder;
 import de.dertoaster.schematicworldgen.schematic.loader.ISchematicLoader;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 import net.minecraft.commands.arguments.blocks.BlockStateParser;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -51,7 +51,7 @@ public final class BO2Loader
         PaletteBuilder palette =
                 new PaletteBuilder();
 
-        List<Integer> positions =
+        List<Long> positions =
                 new ArrayList<>();
 
         List<Short> paletteIds =
@@ -88,14 +88,9 @@ public final class BO2Loader
 
             // Attention! BO2: YXZ, Z: Elevation
             // Object center is always 0/0/0
-            int x =
-                    Integer.parseInt(coords[0]);
-
-            int y =
-                    Integer.parseInt(coords[1]);
-
-            int z =
-                    Integer.parseInt(coords[2]);
+            int z = Integer.parseInt(coords[0]);
+            int x = Integer.parseInt(coords[1]);
+            int y = Integer.parseInt(coords[2]);
 
             // BO2 can be integer values!
             final BlockState state = this.loadBlockState(split[1]);
@@ -106,11 +101,7 @@ public final class BO2Loader
                     palette.idFor(state);
 
             positions.add(
-                    PackedPosition.pack(
-                            x,
-                            y,
-                            z
-                    )
+                    new BlockPos(x, y, z).asLong()
             );
 
             paletteIds.add(paletteId);
@@ -127,8 +118,8 @@ public final class BO2Loader
         short[] ids =
                 new short[paletteIds.size()];
 
-        int[] packed =
-                new int[positions.size()];
+        long[] packed =
+                new long[positions.size()];
 
         for (int i = 0; i < ids.length; i++) {
 

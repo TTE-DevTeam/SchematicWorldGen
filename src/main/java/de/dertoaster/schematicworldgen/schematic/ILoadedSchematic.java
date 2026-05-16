@@ -62,7 +62,7 @@ public interface ILoadedSchematic {
      *
      * @return packed position array
      */
-    int[] packedPositions();
+    long[] packedPositions();
 
     /**
      * Sparse block entity storage.

@@ -3,12 +3,11 @@ package de.dertoaster.schematicworldgen.placement;
 import de.dertoaster.schematicworldgen.placement.context.PlacementContext;
 import de.dertoaster.schematicworldgen.placement.context.ProcessorContext;
 import de.dertoaster.schematicworldgen.placement.processor.ProcessorPipeline;
-import de.dertoaster.schematicworldgen.placement.transform.PlacementTransform;
 import de.dertoaster.schematicworldgen.placement.transform.ReplaceModeHandler;
 import de.dertoaster.schematicworldgen.schematic.ILoadedSchematic;
-import de.dertoaster.schematicworldgen.schematic.internal.PackedPosition;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 /**
  * Core schematic placement engine.
@@ -31,80 +30,32 @@ public final class PlacementEngine {
      * @param origin world origin
      */
     public static void place(
-
             PlacementContext context,
-
             ILoadedSchematic schematic,
-
             BlockPos origin
-
     ) {
-
-        short[] paletteIds =
-                schematic.paletteIds();
-
-        int[] packedPositions =
-                schematic.packedPositions();
-
-        BlockState[] palette =
-                schematic.palette();
+        short[] paletteIds = schematic.paletteIds();
+        long[] packedPositions = schematic.packedPositions();
+        BlockState[] palette = schematic.palette();
 
         ProcessorContext processorContext =
                 new ProcessorContext(
-
                         context.level(),
                         context.random(),
                         context.entry()
-
                 );
 
-        BlockPos.MutableBlockPos mutablePos =
-                new BlockPos.MutableBlockPos();
+        BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
 
         for (int i = 0; i < paletteIds.length; i++) {
+            long packed = packedPositions[i];
+            BlockPos unpacked = BlockPos.of(packed);
 
-            int packed =
-                    packedPositions[i];
+            BlockPos transformed = StructureTemplate.transform(unpacked, context.mirror(), context.rotation(), BlockPos.ZERO).offset(origin);
 
-            int x =
-                    PackedPosition.unpackX(packed);
+            mutablePos.set(transformed);
 
-            int y =
-                    PackedPosition.unpackY(packed);
-
-            int z =
-                    PackedPosition.unpackZ(packed);
-
-            BlockPos transformed =
-                    PlacementTransform.transform(
-
-                            x,
-                            y,
-                            z,
-
-                            schematic.sizeX(),
-                            schematic.sizeZ(),
-
-                            context.rotation(),
-                            context.mirror()
-
-                    );
-
-            mutablePos.set(
-
-                    origin.getX()
-                            + transformed.getX(),
-
-                    origin.getY()
-                            + transformed.getY(),
-
-                    origin.getZ()
-                            + transformed.getZ()
-
-            );
-
-            BlockState state =
-                    palette[paletteIds[i]];
+            BlockState state = palette[paletteIds[i]];
 
             state =
                     ProcessorPipeline.process(

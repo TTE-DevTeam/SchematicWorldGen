@@ -24,7 +24,7 @@ public record PackedLoadedSchematic(
         int sizeZ,
         BlockState[] palette,
         short[] paletteIds,
-        int[] packedPositions,
+        long[] packedPositions,
         Int2ObjectMap<CompoundTag> blockEntities
 ) implements ILoadedSchematic {
     @Override

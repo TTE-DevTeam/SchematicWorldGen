@@ -11,12 +11,12 @@ import com.sk89q.worldedit.regions.Region;
 
 import de.dertoaster.schematicworldgen.schematic.ILoadedSchematic;
 import de.dertoaster.schematicworldgen.schematic.internal.PackedLoadedSchematic;
-import de.dertoaster.schematicworldgen.schematic.internal.PackedPosition;
 import de.dertoaster.schematicworldgen.schematic.internal.PaletteBuilder;
 import de.dertoaster.schematicworldgen.schematic.loader.ISchematicLoader;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 import net.minecraft.commands.arguments.blocks.BlockStateParser;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
@@ -81,7 +81,7 @@ public final class WorldEditLoader
         PaletteBuilder palette =
                 new PaletteBuilder();
 
-        List<Integer> positions =
+        List<Long> positions =
                 new ArrayList<>();
 
         List<Short> paletteIds =
@@ -120,11 +120,11 @@ public final class WorldEditLoader
                     palette.idFor(state);
 
             positions.add(
-                    PackedPosition.pack(
+                    new BlockPos(
                             pos.x(),
                             pos.y(),
                             pos.z()
-                    )
+                    ).asLong()
             );
 
             paletteIds.add(paletteId);
@@ -133,8 +133,8 @@ public final class WorldEditLoader
         short[] ids =
                 new short[paletteIds.size()];
 
-        int[] packed =
-                new int[positions.size()];
+        long[] packed =
+                new long[positions.size()];
 
         for (int i = 0; i < ids.length; i++) {
 

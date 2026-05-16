@@ -3,11 +3,10 @@ package de.dertoaster.schematicworldgen.placement.collision;
 import de.dertoaster.schematicworldgen.feature.config.ECollisionMode;
 import de.dertoaster.schematicworldgen.feature.resolver.SpawnConditionEvaluator;
 import de.dertoaster.schematicworldgen.placement.context.PlacementContext;
-import de.dertoaster.schematicworldgen.placement.transform.PlacementTransform;
 import de.dertoaster.schematicworldgen.schematic.ILoadedSchematic;
-import de.dertoaster.schematicworldgen.schematic.internal.PackedPosition;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 /**
  * Validates whether a schematic can be placed
@@ -27,13 +26,9 @@ public final class CollisionChecker {
      * @return true if placement is allowed
      */
     public static boolean canPlace(
-
             PlacementContext context,
-
             ILoadedSchematic schematic,
-
             BlockPos origin
-
     ) {
 
         if (!SpawnConditionEvaluator.canSpawn(
@@ -55,43 +50,17 @@ public final class CollisionChecker {
         short[] paletteIds =
                 schematic.paletteIds();
 
-        int[] packedPositions =
+        long[] packedPositions =
                 schematic.packedPositions();
 
         var palette =
                 schematic.palette();
 
         for (int i = 0; i < paletteIds.length; i++) {
+            long packed = packedPositions[i];
+            BlockPos unpacked = BlockPos.of(packed);
 
-            int packed =
-                    packedPositions[i];
-
-            int x =
-                    PackedPosition.unpackX(packed);
-
-            int y =
-                    PackedPosition.unpackY(packed);
-
-            int z =
-                    PackedPosition.unpackZ(packed);
-
-            BlockPos transformed =
-                    PlacementTransform.transform(
-
-                            x,
-                            y,
-                            z,
-
-                            schematic.sizeX(),
-                            schematic.sizeZ(),
-
-                            context.rotation(),
-                            context.mirror()
-
-                    );
-
-            BlockPos worldPos =
-                    origin.offset(transformed);
+            BlockPos worldPos = StructureTemplate.transform(unpacked, context.mirror(), context.rotation(), BlockPos.ZERO).offset(origin);
 
             BlockState existing =
                     context.level()

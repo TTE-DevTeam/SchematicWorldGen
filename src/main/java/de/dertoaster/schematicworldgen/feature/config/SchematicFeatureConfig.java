@@ -2,8 +2,12 @@ package de.dertoaster.schematicworldgen.feature.config;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 
 import java.util.List;
 
@@ -15,12 +19,8 @@ import java.util.List;
  * - processor references
  */
 public record SchematicFeatureConfig(
-
         List<SchematicEntry> entries,
-
-        // TODO: Modify to use StructureProcessors instead!
-        List<String> processors
-
+        Holder<StructureProcessorList> processors
 ) implements FeatureConfiguration {
 
     public static final Codec<SchematicFeatureConfig>
@@ -38,18 +38,7 @@ public record SchematicFeatureConfig(
                                             SchematicFeatureConfig::entries
                                     ),
 
-                            Codec.STRING
-
-                                    .listOf()
-
-                                    .optionalFieldOf(
-                                            "processors",
-                                            List.of()
-                                    )
-
-                                    .forGetter(
-                                            SchematicFeatureConfig::processors
-                                    )
+                            StructureProcessorType.LIST_CODEC.fieldOf("processors").forGetter((config) -> config.processors)
 
                     ).apply(
                             instance,

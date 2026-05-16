@@ -1,13 +1,15 @@
 package de.dertoaster.schematicworldgen.placement;
 
 import de.dertoaster.schematicworldgen.placement.context.PlacementContext;
-import de.dertoaster.schematicworldgen.placement.context.ProcessorContext;
-import de.dertoaster.schematicworldgen.placement.processor.ProcessorPipeline;
-import de.dertoaster.schematicworldgen.placement.transform.ReplaceModeHandler;
 import de.dertoaster.schematicworldgen.schematic.ILoadedSchematic;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Core schematic placement engine.
@@ -38,33 +40,47 @@ public final class PlacementEngine {
         long[] packedPositions = schematic.packedPositions();
         BlockState[] palette = schematic.palette();
 
-        ProcessorContext processorContext =
-                new ProcessorContext(
-                        context.level(),
-                        context.random(),
-                        context.entry()
-                );
-
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+        List<StructureTemplate.StructureBlockInfo> structureBlockInfos = new ArrayList<>(paletteIds.length);
+        List<StructureTemplate.StructureBlockInfo> worldBlockInfos = new ArrayList<>(paletteIds.length);
 
         for (int i = 0; i < paletteIds.length; i++) {
             long packed = packedPositions[i];
             BlockPos unpacked = BlockPos.of(packed);
-            BlockPos transformed = StructureTemplate.transform(unpacked, context.mirror(), context.rotation(), BlockPos.ZERO).offset(origin);
+            BlockPos transformed = StructureTemplate.transform(unpacked, context.settings().getMirror(), context.settings().getRotation(), BlockPos.ZERO).offset(origin);
             mutablePos.set(transformed);
-            BlockState state = palette[paletteIds[i]].mirror(context.mirror()).rotate(context.rotation());;
+            BlockState state = palette[paletteIds[i]].mirror(context.settings().getMirror()).rotate(context.settings().getRotation());
 
-            // TODO: Use StructureProcessors
-            state = ProcessorPipeline.process(context.processors(), processorContext, mutablePos, state);
-            if (state == null) {
-                continue;
+            final BlockPos pos = mutablePos.immutable();
+            CompoundTag nbt = null;
+            if (context.level().getBlockEntity(pos) != null) {
+                nbt = context.level().getBlockEntity(pos).getUpdateTag(context.level().registryAccess());
+            }
+            StructureTemplate.StructureBlockInfo worldInfo = new StructureTemplate.StructureBlockInfo(pos, context.level().getBlockState(pos), nbt);
+
+            StructureTemplate.StructureBlockInfo structureInfo = new StructureTemplate.StructureBlockInfo(pos, state, schematic.blockEntities().getOrDefault(i, null));
+            for (StructureProcessor processor : context.settings().getProcessors()) {
+                structureInfo = processor.processBlock(context.level(), origin, pos, worldInfo, structureInfo, context.settings());
+                if (structureInfo == null) {
+                    break;
+                }
             }
 
-            if (!ReplaceModeHandler.shouldPlace(context.entry().replaceMode(), context.level().getBlockState(mutablePos), state)) {
-                continue;
+            if (structureInfo != null) {
+                structureBlockInfos.add(structureInfo);
+                worldBlockInfos.add(worldInfo);
             }
+        }
 
-            context.level().setBlock(mutablePos, state, 2 | 16);
+        for (StructureProcessor processor : context.settings().getProcessors()) {
+            structureBlockInfos = processor.finalizeProcessing(context.level(), origin, BlockPos.ZERO, worldBlockInfos, structureBlockInfos, context.settings());
+        }
+
+        if (!structureBlockInfos.isEmpty()) {
+            for (StructureTemplate.StructureBlockInfo info : structureBlockInfos) {
+                // TODO: Block Entities
+                context.level().setBlock(info.pos(), info.state(), 2 | 16);
+            }
         }
     }
 }

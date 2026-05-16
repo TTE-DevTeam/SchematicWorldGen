@@ -1,6 +1,5 @@
 package de.dertoaster.schematicworldgen.feature;
 
-import de.dertoaster.schematicworldgen.feature.processor.SchematicProcessors;
 import de.dertoaster.schematicworldgen.schematic.cache.SchematicCache;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
@@ -24,8 +23,5 @@ public class ResourceReloadHandler
     @Override
     protected void apply(Void unused, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
         SchematicCache.INSTANCE.clear();
-
-        SchematicProcessors.clear();
-        SchematicFeatureBootstrap.init();
     }
 }

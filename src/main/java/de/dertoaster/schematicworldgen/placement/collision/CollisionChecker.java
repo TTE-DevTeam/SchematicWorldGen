@@ -60,7 +60,7 @@ public final class CollisionChecker {
             long packed = packedPositions[i];
             BlockPos unpacked = BlockPos.of(packed);
 
-            BlockPos worldPos = StructureTemplate.transform(unpacked, context.mirror(), context.rotation(), BlockPos.ZERO).offset(origin);
+            BlockPos worldPos = StructureTemplate.transform(unpacked, context.settings().getMirror(), context.settings().getRotation(), BlockPos.ZERO).offset(origin);
 
             BlockState existing =
                     context.level()

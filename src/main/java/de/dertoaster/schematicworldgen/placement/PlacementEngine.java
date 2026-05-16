@@ -50,47 +50,21 @@ public final class PlacementEngine {
         for (int i = 0; i < paletteIds.length; i++) {
             long packed = packedPositions[i];
             BlockPos unpacked = BlockPos.of(packed);
-
             BlockPos transformed = StructureTemplate.transform(unpacked, context.mirror(), context.rotation(), BlockPos.ZERO).offset(origin);
-
             mutablePos.set(transformed);
+            BlockState state = palette[paletteIds[i]].mirror(context.mirror()).rotate(context.rotation());;
 
-            BlockState state = palette[paletteIds[i]];
-
-            state =
-                    ProcessorPipeline.process(
-
-                            context.processors(),
-
-                            processorContext,
-
-                            mutablePos,
-
-                            state
-
-                    );
-
+            // TODO: Use StructureProcessors
+            state = ProcessorPipeline.process(context.processors(), processorContext, mutablePos, state);
             if (state == null) {
                 continue;
             }
 
-            if (!ReplaceModeHandler.shouldPlace(
-                    context.entry().replaceMode(),
-                    context.level().getBlockState(mutablePos),
-                    state
-            )) {
+            if (!ReplaceModeHandler.shouldPlace(context.entry().replaceMode(), context.level().getBlockState(mutablePos), state)) {
                 continue;
             }
 
-            context.level().setBlock(
-
-                    mutablePos,
-
-                    state,
-
-                    2 | 16
-
-            );
+            context.level().setBlock(mutablePos, state, 2 | 16);
         }
     }
 }

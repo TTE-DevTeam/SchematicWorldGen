@@ -8,8 +8,8 @@
                 "file": "tte:schematics/shroom/yellow/1.bo2",
                 "offset": [
                     -20,
-                    -24,
-                    -8
+                    -8,
+                    -24
                 ],
                 "persistent_leaves": false,
                 "placement_mode": "terrain",

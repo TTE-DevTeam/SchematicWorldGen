@@ -28,7 +28,8 @@
                 "terrain_offset": 0,
                 "weight": 100
             }
-        ]
+        ],
+        "processors": "minecraft:empty"
     },
     "type": "schematicworldgen:schematic"
 }

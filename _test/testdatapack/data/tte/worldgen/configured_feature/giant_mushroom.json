@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:random_selector",
+  "config": {
+    "default": {
+      "feature": "tte:yellow_mushroom",
+      "placement": []
+    },
+    "features": [
+        {
+          "feature": "tte:green_giant_mushroom",
+          "chance": 0.4
+        },
+        {
+          "feature": "tte:yellow_giant_mushroom",
+          "chance": 0.4
+        },
+        {
+          "feature": "tte:purple_giant_mushroom",
+          "chance": 0.2
+        }
+    ]
+  }
+}

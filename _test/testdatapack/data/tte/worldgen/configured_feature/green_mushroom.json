@@ -5,7 +5,7 @@
                 "adapt_waterlogging": true,
                 "collision_mode": "solid_blocks",
                 "extend_foundation": false,
-                "file": "tte:schematics/shroom/yellow/1.bo2",
+                "file": "tte:schematics/shroom/green/1.bo2",
                 "offset": [
                     0,
                     0,
@@ -32,7 +32,7 @@
                 "adapt_waterlogging": true,
                 "collision_mode": "solid_blocks",
                 "extend_foundation": false,
-                "file": "tte:schematics/shroom/yellow/2.bo2",
+                "file": "tte:schematics/shroom/green/2.bo2",
                 "offset": [
                     0,
                     0,
@@ -59,7 +59,7 @@
                 "adapt_waterlogging": true,
                 "collision_mode": "solid_blocks",
                 "extend_foundation": false,
-                "file": "tte:schematics/shroom/yellow/3.bo2",
+                "file": "tte:schematics/shroom/green/3.bo2",
                 "offset": [
                     0,
                     0,
@@ -86,7 +86,7 @@
                 "adapt_waterlogging": true,
                 "collision_mode": "solid_blocks",
                 "extend_foundation": false,
-                "file": "tte:schematics/shroom/yellow/4.bo2",
+                "file": "tte:schematics/shroom/green/4.bo2",
                 "offset": [
                     0,
                     0,
@@ -113,7 +113,7 @@
                 "adapt_waterlogging": true,
                 "collision_mode": "solid_blocks",
                 "extend_foundation": false,
-                "file": "tte:schematics/shroom/yellow/5.bo2",
+                "file": "tte:schematics/shroom/green/5.bo2",
                 "offset": [
                     0,
                     0,
@@ -140,7 +140,7 @@
                 "adapt_waterlogging": true,
                 "collision_mode": "solid_blocks",
                 "extend_foundation": false,
-                "file": "tte:schematics/shroom/yellow/6.bo2",
+                "file": "tte:schematics/shroom/green/6.bo2",
                 "offset": [
                     0,
                     0,
@@ -167,7 +167,7 @@
                 "adapt_waterlogging": true,
                 "collision_mode": "solid_blocks",
                 "extend_foundation": false,
-                "file": "tte:schematics/shroom/yellow/7.bo2",
+                "file": "tte:schematics/shroom/green/7.bo2",
                 "offset": [
                     0,
                     0,
@@ -194,7 +194,7 @@
                 "adapt_waterlogging": true,
                 "collision_mode": "solid_blocks",
                 "extend_foundation": false,
-                "file": "tte:schematics/shroom/yellow/8.bo2",
+                "file": "tte:schematics/shroom/green/8.bo2",
                 "offset": [
                     0,
                     0,
@@ -221,7 +221,7 @@
                 "adapt_waterlogging": true,
                 "collision_mode": "solid_blocks",
                 "extend_foundation": false,
-                "file": "tte:schematics/shroom/yellow/9.bo2",
+                "file": "tte:schematics/shroom/green/9.bo2",
                 "offset": [
                     0,
                     0,
@@ -248,7 +248,7 @@
                 "adapt_waterlogging": true,
                 "collision_mode": "solid_blocks",
                 "extend_foundation": false,
-                "file": "tte:schematics/shroom/yellow/10.bo2",
+                "file": "tte:schematics/shroom/green/10.bo2",
                 "offset": [
                     0,
                     0,

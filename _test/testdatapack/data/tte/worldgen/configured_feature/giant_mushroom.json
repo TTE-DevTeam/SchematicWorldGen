@@ -1,23 +1,36 @@
 {
-  "type": "minecraft:random_selector",
-  "config": {
-    "default": {
-      "feature": "tte:yellow_mushroom",
-      "placement": []
+    "config": {
+        "default": {
+            "feature": "minecraft:patch_red_mushroom",
+            "placement": [
+            ]
+        },
+        "features": [
+            {
+                "chance": 0.4,
+                "feature": {
+                    "feature": "tte:green_mushroom",
+                    "placement": [
+                    ]
+                }
+            },
+            {
+                "chance": 0.4,
+                "feature": {
+                    "feature": "tte:yellow_mushroom",
+                    "placement": [
+                    ]
+                }
+            },
+            {
+                "chance": 0.2,
+                "feature": {
+                    "feature": "tte:purple_mushroom",
+                    "placement": [
+                    ]
+                }
+            }
+        ]
     },
-    "features": [
-        {
-          "feature": "tte:green_giant_mushroom",
-          "chance": 0.4
-        },
-        {
-          "feature": "tte:yellow_giant_mushroom",
-          "chance": 0.4
-        },
-        {
-          "feature": "tte:purple_giant_mushroom",
-          "chance": 0.2
-        }
-    ]
-  }
+    "type": "minecraft:random_selector"
 }

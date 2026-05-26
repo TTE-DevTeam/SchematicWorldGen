@@ -1,15 +1,23 @@
 {
-  "feature": "tte:giant_mushroom",
-  "placement": [
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:heightmap",
-      "heightmap": "MOTION_BLOCKING"
-    },
-    {
-      "type": "minecraft:biome"
-    }
-  ]
+    "feature": "tte:giant_mushroom",
+    "placement": [
+        {
+            "type": "minecraft:in_square"
+        },
+        {
+            "heightmap": "MOTION_BLOCKING",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "heightmap": "WORLD_SURFACE_WG",
+            "type": "minecraft:heightmap"
+        },
+        {
+            "type": "minecraft:biome"
+        },
+        {
+            "chance": 20,
+            "type": "minecraft:rarity_filter"
+        }
+    ]
 }

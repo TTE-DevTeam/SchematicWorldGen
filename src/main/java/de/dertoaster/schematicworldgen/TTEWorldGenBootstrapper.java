@@ -22,6 +22,12 @@ public final class TTEWorldGenBootstrapper implements PluginBootstrap {
                 Identifier.fromNamespaceAndPath("schematicworldgen", "configurable_large_dripstone"),
                 SchematicFeatures.CONFIGURABLE_LARGE_DRIPSTONE.get()
         );
+
+        Registry.register(
+                BuiltInRegistries.FEATURE,
+                Identifier.fromNamespaceAndPath("schematicworldgen", "surface_fragment"),
+                SchematicFeatures.FRAGMENT_SURFACE.get()
+        );
     }
 
 }

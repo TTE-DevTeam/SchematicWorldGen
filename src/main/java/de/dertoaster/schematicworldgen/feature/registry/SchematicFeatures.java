@@ -2,8 +2,10 @@ package de.dertoaster.schematicworldgen.feature.registry;
 
 import de.dertoaster.schematicworldgen.feature.ConfigurableLargeDripstoneFeature;
 import de.dertoaster.schematicworldgen.feature.SchematicFeature;
+import de.dertoaster.schematicworldgen.feature.SurfaceFragmentFeature;
 import de.dertoaster.schematicworldgen.feature.config.ConfigurableLargeDripstoneConfiguration;
 import de.dertoaster.schematicworldgen.feature.config.SchematicFeatureConfig;
+import de.dertoaster.schematicworldgen.feature.config.SurfaceFragmentConfig;
 import net.minecraft.world.level.levelgen.feature.Feature;
 
 import java.util.function.Supplier;
@@ -25,6 +27,12 @@ public final class SchematicFeatures {
             CONFIGURABLE_LARGE_DRIPSTONE =
             () -> new ConfigurableLargeDripstoneFeature(
                     ConfigurableLargeDripstoneConfiguration.CODEC
+            );
+
+    public static final Supplier<Feature<SurfaceFragmentConfig>>
+            FRAGMENT_SURFACE =
+            () -> new SurfaceFragmentFeature(
+                    SurfaceFragmentConfig.CODEC
             );
 
     private SchematicFeatures() {

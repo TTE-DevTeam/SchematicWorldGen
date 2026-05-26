@@ -1,4 +1,4 @@
-package de.dertoaster.schematicworldgen.feature;
+package de.dertoaster.schematicworldgen.feature.registry;
 
 import de.dertoaster.schematicworldgen.schematic.cache.SchematicCache;
 import net.minecraft.server.packs.resources.ResourceManager;
